@@ -29,16 +29,11 @@ public class Jogo {
             if (jogador >= 'a' && jogador <= 'i') {
                 Modo modoOficial = Modo.UNO_OFICIAL;
                 UNO unoOficial = new UNO(modoOficial, jogadorNum-95);
-                System.out.println(jogadorNum);
-                System.out.println(jogadorNum-95);
             }
         } else if (modo == 'b') {
             if (jogador >= 'a' && jogador <= 'i') {
                 Modo modoConvencional = Modo.CONVENCIONAL;
                 UNO unoConvencional = new UNO(modoConvencional, jogadorNum-95);
-                System.out.println(jogadorNum);
-                System.out.println(jogadorNum-95);
-
             }
         } else {
             System.out.println("Opção inválida.");

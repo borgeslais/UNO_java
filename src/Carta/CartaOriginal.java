@@ -1,43 +1,28 @@
 package Carta;
 
 public class CartaOriginal extends Carta {
-    int simboloOrig;
     Cor cor;
 
-    // 1° Caso: carta tradicional (cor, numero, não é de ação)
-    public CartaOriginal(Simbolo simboloOrig, Cor cor){
-        this.simboloOrig = simboloOrig.getSimbolo();
+    // 1° Caso
+    public CartaOriginal(Simbolo simbolo, Cor cor){
+        super(simbolo, cor);
         this.cor = cor;
     }
 
-    // 2° Caso: carta de ação com cor (cor, ação, é de ação)
-    public CartaOriginal(Simbolo simboloOrig, Cor cor, Acao acao){
-        this.simboloOrig = simboloOrig.getSimbolo();
-        this.acao = acao;
+    // 2° Caso
+    public CartaOriginal(Simbolo simbolo, Cor cor, Acao acao){
+        super(simbolo, cor, acao);
         this.cor = cor;
-        this.eDeAcao = true;
     }
 
-    // 3° Caso: carta curinga (eDeAcao)
-    public CartaOriginal( Acao acao){
-        this.eCuringa = true;
-        this.acao = acao;
+    // 3° Caso
+    public CartaOriginal(Simbolo simbolo, Acao acao) {
+        super(simbolo, acao);
     }
 
-    public int getSimbolo(){
-        return this.simboloOrig;
-    }
-
+    // Getters
     public Cor getCor(){
         return this.cor;
-    }
-
-    public Acao getAcao(){
-        return this.acao;
-    }
-
-    public boolean getCuringa(){
-        return this.eCuringa;
     }
 }
 

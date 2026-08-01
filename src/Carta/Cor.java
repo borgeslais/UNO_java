@@ -1,6 +1,6 @@
 package Carta;
 
-public enum Cor {
+public enum Cor implements CategoriaCarta {
     AZUL,
     AMARELO,
     VERDE,

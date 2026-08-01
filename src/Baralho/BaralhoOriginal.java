@@ -4,24 +4,21 @@ import Carta.*;
 
 import java.util.ArrayList;
 
-public class BaralhoOriginal {
-    public ArrayList<CartaOriginal> cartas;
-    Simbolo[] simboloOriginal = Simbolo.values();
-    Cor[] cor = Cor.values();
-    Acao[] acao = Acao.values();
+public class BaralhoOriginal extends Baralho<CartaOriginal>{
 
     public BaralhoOriginal() {
-        cartas = new ArrayList<CartaOriginal>();
+        super();
+        categoria = Cor.values();
 
         /*
          * Adicionando cartas 0 - 9 ao baralho
          */
         for (int i = 0; i < 4; i++) {
-            cartas.add(new CartaOriginal(simboloOriginal[0], cor[i]));
+            cartas.add(new CartaOriginal(simbolo[0], (Cor) categoria[i]));
             for (int j = 1; j < 10; j++) {
-                CartaOriginal carta1 = new CartaOriginal(simboloOriginal[j], cor[i]);
+                CartaOriginal carta1 = new CartaOriginal(simbolo[j], (Cor) categoria[i]);
                 cartas.add(carta1);
-                CartaOriginal carta2 = new CartaOriginal(simboloOriginal[j], cor[i]);
+                CartaOriginal carta2 = new CartaOriginal(simbolo[j], (Cor) categoria[i]);
                 cartas.add(carta2);
             }
         }
@@ -32,11 +29,11 @@ public class BaralhoOriginal {
         for (Cor c : Cor.values()) {
             for (int i = 0; i < 3; i++) {
                 cartas.add(new CartaOriginal(
-                        simboloOriginal[10 + i],
+                        simbolo[10 + i],
                         c,
                         acao[i]));
                 cartas.add(new CartaOriginal(
-                        simboloOriginal[10 + i],
+                        simbolo[10 + i],
                         c,
                         acao[i]));
 
@@ -48,7 +45,7 @@ public class BaralhoOriginal {
          */
         for (int i = 13; i < 15; i++) {
             for(int j = 0; j < 4; j++){
-                cartas.add(new CartaOriginal(acao[i - 10]));
+                cartas.add(new CartaOriginal(simbolo[i], acao[i-10]));
             }
         }
     }
@@ -60,7 +57,7 @@ public class BaralhoOriginal {
                 System.out.println(carta.getCor());
             }
 
-            if(!carta.getCuringa()){
+            if (!carta.getIsCuringa()) {
                 System.out.println(carta.getSimbolo());
             }
 
@@ -72,4 +69,5 @@ public class BaralhoOriginal {
         }
 
     }
+
 }

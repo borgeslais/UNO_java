@@ -3,26 +3,22 @@ package Baralho;
 import Carta.Acao;
 import Carta.CartaConvencional;
 import Carta.Naipe;
+import Carta.Carta;
 import Carta.Simbolo;
 
 import java.util.ArrayList;
 
-public class BaralhoConvencional {
-    public ArrayList<CartaConvencional> cartas;
-    Simbolo[] simboloConvencional = Simbolo.values();
-    Naipe[] naipe = Naipe.values();
-    Acao[] acao = Acao.values();
-
+public class BaralhoConvencional extends Baralho<CartaConvencional> {
 
     public BaralhoConvencional() {
-        cartas = new ArrayList<CartaConvencional>();
-
+        super();
+        categoria = Naipe.values();
         /*
          * Adicionando cartas 1 - 10 ao baralho
          */
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 10; j++) {
-                CartaConvencional carta = new CartaConvencional(simboloConvencional[j], naipe[i]);
+                CartaConvencional carta = new CartaConvencional(simbolo[j], (Naipe) categoria[i]);
                 cartas.add(carta);
             }
         }
@@ -33,7 +29,7 @@ public class BaralhoConvencional {
         for (Naipe n : Naipe.values()) {
             for (int i = 0; i < 3; i++) {
                 cartas.add(new CartaConvencional(
-                        simboloConvencional[10 + i],
+                        simbolo[10 + i],
                         n,
                         acao[i]));
             }
@@ -43,7 +39,7 @@ public class BaralhoConvencional {
          * Adicionando 4 curingas black e 4 curingas red (NOVA_COR, MAIS_QUATRO)
          */
         for(int i = 13; i < 15; i++){
-                cartas.add(new CartaConvencional(simboloConvencional[i],true, acao[i-10]));
+                cartas.add(new CartaConvencional(simbolo[i], acao[i-10]));
         }
     }
 
