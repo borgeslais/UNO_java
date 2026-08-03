@@ -1,5 +1,7 @@
 package Carta;
 
+import Jogo.Modo;
+
 public abstract class Carta {
     boolean eDeAcao = false;
     Acao acao;
@@ -9,13 +11,13 @@ public abstract class Carta {
 
     // Construtores
     // 1° Caso: carta tradicional (cor, numero, não é de ação)
-    public Carta(Simbolo simbolo, CategoriaCarta categoria){
+    public Carta(Simbolo simbolo, CategoriaCarta categoria) {
         this.simbolo = simbolo;
         this.categoria = categoria;
     }
 
     // 2° Caso: carta de ação com cor (cor, ação, é de ação)
-    public Carta(Simbolo simbolo, CategoriaCarta categoria, Acao acao){
+    public Carta(Simbolo simbolo, CategoriaCarta categoria, Acao acao) {
         this.simbolo = simbolo;
         this.categoria = categoria;
         this.acao = acao;
@@ -23,7 +25,7 @@ public abstract class Carta {
     }
 
     // 3° Caso: carta curinga (eCuringa, eDeAcao)
-    public Carta(Simbolo simbolo, Acao acao){
+    public Carta(Simbolo simbolo, Acao acao) {
         this.simbolo = simbolo;
         this.acao = acao;
         this.eCuringa = true;
@@ -33,10 +35,26 @@ public abstract class Carta {
     public Simbolo getSimbolo() {
         return this.simbolo;
     }
-    public int getValor(){
-        return simbolo.getSimbolo();
+
+    public int getValor() {
+        return simbolo.getValor();
     }
-    public boolean getIsDeAcao() { return eDeAcao; }
-    public Acao getAcao() { return acao; }
-    public boolean getIsCuringa() { return eCuringa; }
+
+    public CategoriaCarta getCategoria() {
+        return this.categoria;
+    }
+
+    public boolean getIsDeAcao() {
+        return eDeAcao;
+    }
+
+    public Acao getAcao() {
+        return acao;
+    }
+
+    public boolean getIsCuringa() {
+        return eCuringa;
+    }
+
+
 }

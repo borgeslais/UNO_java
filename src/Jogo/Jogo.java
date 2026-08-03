@@ -1,11 +1,8 @@
-import Baralho.BaralhoConvencional;
-import Baralho.BaralhoOriginal;
+package Jogo;
 
 import java.util.Scanner;
 
 public class Jogo {
-    int jogadores;
-
     public Jogo() {
         System.out.println("********   UNO   ********");
         System.out.println("Selecione o modo de jogo: com baralho oficial UNO ou com baralho de cartas convencional:");

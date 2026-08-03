@@ -23,7 +23,7 @@ public enum Simbolo {
         this.simbolo = simbolo;
     }
 
-    public int getSimbolo() {
+    public int getValor() {
         return this.simbolo;
     }
 }
