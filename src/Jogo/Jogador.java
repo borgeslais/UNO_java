@@ -20,47 +20,33 @@ public class Jogador {
         mao.add(carta);
     }
 
-    public Carta joga(){
-        int pos = 0;
-        for (Carta carta : mao) {
-            System.out.println(pos + ") ");
-            mostraCarta(carta);
-            pos++;
-        }
-
+    public Carta joga(List<Carta> pilhaCompra, List<Carta> pilhaDescarte) {
         Scanner sc = new Scanner(System.in);
-        int c = sc.nextInt();
-        return mao.get(c);
-    }
 
-    public void mostraCarta(Carta carta) {
-        if (carta.getIsCuringa()) {
-            // 3° Caso: carta curinga
-            if (modo == Modo.UNO_OFICIAL) {
-                System.out.print(carta.getSimbolo().getValor());
+        while (true) {
+            System.out.println("Digite o número da carta para jogar, ou -1 para comprar do monte:");
+            int c = sc.nextInt();
+
+            if (c == -1) {
+                if (pilhaCompra.isEmpty()) {
+                    UNO.reabastecerPilhaCompra(pilhaCompra, pilhaDescarte);
+                }
+                if (pilhaCompra.isEmpty()) {
+                    // pilha de compra vazia
+                    System.out.println("Não há mais cartas para comprar.");
+                    continue;
+                }
+
+                Carta comprada = pilhaCompra.removeFirst();
+                mao.add(comprada);
+                System.out.println("Você comprou uma carta.");
+                return null;
+            } else if (c >= 1 && c < mao.size()) {
+                return mao.get(c - 1);
             } else {
-                System.out.print(carta.getSimbolo());
+                System.out.println("Opção inválida, tente novamente.");
             }
-            System.out.print(carta.getAcao());
-        } else if (carta.getIsDeAcao()) {
-            // 2° Caso: carta de ação com símbolo
-            if (modo == Modo.UNO_OFICIAL) {
-                System.out.print(carta.getValor());
-            } else {
-                System.out.print(carta.getSimbolo());
-            }
-            System.out.print(carta.getCategoria());
-            System.out.print(carta.getAcao());
-        } else {
-            // 1° Caso: carta tradicional
-            if (modo == Modo.UNO_OFICIAL) {
-                System.out.print(carta.getValor());
-            } else {
-                System.out.print(carta.getSimbolo());
-            }
-            System.out.print(carta.getCategoria());
         }
     }
-
 
 }

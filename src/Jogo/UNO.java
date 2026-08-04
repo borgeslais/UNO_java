@@ -8,19 +8,21 @@ import java.util.*;
 
 public class UNO {
     Baralho<? extends Carta> conjuntoBaralho;
-    List<? extends Carta> baralho;
+    List<Carta> baralho;
     Carta cartaComparativa;
     Modo modo;
+    List<Carta> pilhaCompra;
+    List<Carta> pilhaDescarte;
 
-    public UNO(Modo modo, int nJogadores){
-        if (modo == Modo.UNO_OFICIAL){
+    public UNO(Modo modo, int nJogadores) {
+        if (modo == Modo.UNO_OFICIAL) {
             conjuntoBaralho = new BaralhoOriginal();
         } else {
             conjuntoBaralho = new BaralhoConvencional();
         }
 
         this.modo = modo;
-        baralho = conjuntoBaralho.getBaralho();
+        baralho = new ArrayList<>(conjuntoBaralho.getBaralho());
 
         // Embaralha
         Collections.shuffle(baralho);
@@ -31,9 +33,9 @@ public class UNO {
         // Maos[1] = [0,1,2,3,4,5,6]
 
         List<Jogador> jogadores = new ArrayList<>();
-        for(int i = 0; i < nJogadores; i++){
+        for (int i = 0; i < nJogadores; i++) {
             jogadores.add(new Jogador());
-            for(int j = 0; j < 7; j++){
+            for (int j = 0; j < 7; j++) {
                 // Inicializa mão com 7 cartas
                 jogadores.get(i).add(baralho.getFirst());
                 baralho.removeFirst();
@@ -42,79 +44,119 @@ public class UNO {
 
         // Cria pilha de compra com restante das cartas
         Carta primeiraCarta = baralho.getFirst();
-        List<? extends Carta> pilhaCompra = baralho;
-        pilhaCompra.removeFirst();
+        baralho.removeFirst();
+        pilhaCompra = baralho;
 
-        // Cria pilha de descarte
-        List<Carta> pilhaDescarte = new ArrayList<>();
+        // Pilha de descarte
+        pilhaDescarte = new ArrayList<>();
         pilhaDescarte.add(primeiraCarta);
 
         cartaComparativa = pilhaDescarte.getLast();
         mostraCartaComparativa();
 
+        int jogadorAtual = 0;
+        int direcao = 1;
+        boolean jogoAcabou = false;
 
-        for(int i = 0; i < jogadores.size(); i++){
-           while(jogadores.get(i).getMao() != null){
-                System.out.println("Escolha a carta para jogar ou compre do monte.");
-                mostraMao(jogadores.get(i));
-                Carta cartaEscolhida = jogadores.get(i).joga();
-                while(!verificaCartas(cartaEscolhida, cartaComparativa)){
-                    System.out.println("Carta escolhida não é válida, escolha outra carta.");
-                    jogadores.get(i).joga();
+        // Loop de jogada
+        while (!jogoAcabou) {
+            Jogador atual = jogadores.get(jogadorAtual);
+            System.out.println("\n --- Vez do jogador: " + jogadorAtual + " ---\n");
+            mostraMao(atual);
+
+            Carta cartaEscolhida = null;
+            boolean jogadaValida = false;
+
+            while (!jogadaValida) {
+                cartaEscolhida = atual.joga(pilhaCompra, pilhaDescarte);
+
+                if (cartaEscolhida == null) {
+                    // jogador optou por comprar
+                    break;
                 }
-                pilhaDescarte.add(cartaEscolhida);
-                jogadores.get(i).remove(cartaEscolhida);
-
+                if (verificaCartas(cartaEscolhida, cartaComparativa)) {
+                    jogadaValida = true;
+                } else {
+                    System.out.println("Carta escolhida não é válida, escolha outra.");
+                }
             }
 
+            if (cartaEscolhida != null) {
+                pilhaDescarte.add(cartaEscolhida);
+                atual.remove(cartaEscolhida);
+                cartaComparativa = cartaEscolhida;
+                mostraCartaComparativa();
+
+                if (atual.getMao().isEmpty()) {
+                    System.out.println("Jogador " + jogadorAtual + " venceu o jogo!");
+                    jogoAcabou = true;
+                    continue;
+                }
+
+                // TODO: efeitos de cartas de ação
+            }
+
+            jogadorAtual = (jogadorAtual + direcao + jogadores.size()) % jogadores.size();
         }
     }
 
     void mostraCartaComparativa(){
+        System.out.println("\n --- Carta da Pilha: ---\n");
         mostraCarta(cartaComparativa);
     }
 
     void mostraCarta(Carta carta){
+        String valor;
+
         if(carta.getIsCuringa()){
             // 3° Caso: carta curinga
             if(modo == Modo.UNO_OFICIAL){
-                System.out.println(carta.getSimbolo().getValor());
+                valor = String.valueOf(carta.getSimbolo().getValor());
             } else {
-                System.out.println(carta.getSimbolo());
+                valor = String.valueOf(carta.getSimbolo());
             }
-            System.out.println(cartaComparativa.getAcao());
+            System.out.print(valor + ", " + carta.getAcao());
         } else if(carta.getIsDeAcao()){
             // 2° Caso: carta de ação com símbolo
             if(modo == Modo.UNO_OFICIAL){
-                System.out.println(carta.getValor());
+                valor = String.valueOf(carta.getValor());
             } else {
-                System.out.println(carta.getSimbolo());
+                valor = String.valueOf(carta.getSimbolo());
             }
-            System.out.println(carta.getCategoria());
-            System.out.println(carta.getAcao());
+            System.out.print(valor + ", " + carta.getCategoria() + ", " + carta.getAcao());
         } else {
             // 1° Caso: carta tradicional
             if(modo == Modo.UNO_OFICIAL){
-                System.out.println(carta.getValor());
+                valor = String.valueOf(carta.getValor());
             } else {
-                System.out.println(carta.getSimbolo());
+                valor = String.valueOf(carta.getSimbolo());
             }
-            System.out.println(carta.getCategoria());
+            System.out.print(valor + ", " + carta.getCategoria());
         }
+        System.out.println();
     }
 
     void mostraMao(Jogador jogador){
         List<Carta> cartasJogador = jogador.getMao();
-        for(int i = 1; i <= cartasJogador.size(); i++ ){
-            for (Carta carta : cartasJogador) {
-                System.out.println(0 + "i");
-                mostraCarta(carta);
-                System.out.println();
-            }
+        for (int i = 0; i < cartasJogador.size(); i++) {
+            System.out.print((i + 1) + ") ");
+            mostraCarta(cartasJogador.get(i));
         }
     }
 
     boolean verificaCartas(Carta cartaJogador, Carta cartaComparativa){
         return cartaJogador.getCategoria() == cartaComparativa.getCategoria() || cartaJogador.getValor() == cartaComparativa.getValor() || cartaJogador.getSimbolo() == cartaComparativa.getSimbolo() || cartaJogador.getIsCuringa();
+    }
+
+    static void reabastecerPilhaCompra(List<Carta> pilhaCompra, List<Carta> pilhaDescarte){
+        if (pilhaDescarte.size() <= 1) {
+            // nada pra reaproveitar ainda
+            return;
+        }
+        Carta topo = pilhaDescarte.removeLast();
+        pilhaCompra.addAll(pilhaDescarte);
+        pilhaDescarte.clear();
+        pilhaDescarte.add(topo);
+        Collections.shuffle(pilhaCompra);
     }
 }

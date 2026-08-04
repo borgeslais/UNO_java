@@ -16,7 +16,7 @@ public abstract class Baralho<T extends Carta> {
         cartas = new ArrayList<>();
         simbolo = Simbolo.values();
         categoria = new CategoriaCarta[4];
-        acao = new Acao[5];
+        acao = Acao.values();
     }
 
     // Getter
