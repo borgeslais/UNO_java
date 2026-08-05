@@ -27,6 +27,10 @@ public class CartaConvencional extends Carta {
         return this.naipe;
     }
 
+    public void setCategoria(CategoriaCarta categoria) {
+        super.setCategoria(categoria);
+        this.naipe = (Naipe) categoria;
+    }
 
 
 

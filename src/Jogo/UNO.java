@@ -3,8 +3,10 @@ package Jogo;
 import Baralho.Baralho;
 import Baralho.BaralhoConvencional;
 import Baralho.BaralhoOriginal;
+import Carta.CategoriaCarta;
 import Carta.Carta;
 import Carta.Cor;
+import Carta.Naipe;
 
 import java.util.*;
 
@@ -28,8 +30,14 @@ public class UNO {
         Collections.shuffle(baralho);
 
         List<Jogador> jogadores = new ArrayList<>();
+        Scanner scNomes = new Scanner(System.in);
         for (int i = 0; i < nJogadores; i++) {
-            jogadores.add(new Jogador());
+            System.out.println("Digite o nome do jogador " + (i + 1) + ":");
+            String nome = scNomes.nextLine();
+            if (nome.isBlank()) {
+                nome = "Jogador " + (i + 1);
+            }
+            jogadores.add(new Jogador(nome));
             for (int j = 0; j < 7; j++) {
                 jogadores.get(i).add(baralho.getFirst());
                 baralho.removeFirst();
@@ -59,7 +67,7 @@ public class UNO {
 
         while (!jogoAcabou) {
             Jogador atual = jogadores.get(jogadorAtual);
-            System.out.println("\n --- Vez do jogador: " + jogadorAtual + " ---\n");
+            System.out.println("\n --- Vez de " + atual.getNome() + " ---\n");
             mostraCartaComparativa();
             mostraMao(atual);
 
@@ -85,18 +93,18 @@ public class UNO {
                 pilhaDescarte.add(cartaEscolhida);
                 atual.remove(cartaEscolhida);
 
-                // Curinga: jogador escolhe a nova cor antes de virar a carta comparativa
+                // Curinga: jogador escolhe a nova categoria (cor ou naipe) antes de virar a carta comparativa
                 if (cartaEscolhida.getIsCuringa()) {
-                    Cor corEscolhida = escolheCor();
-                    cartaEscolhida.setCategoria(corEscolhida);
-                    System.out.println("Cor escolhida: " + corEscolhida);
+                    CategoriaCarta categoriaEscolhida = escolheCategoria();
+                    cartaEscolhida.setCategoria(categoriaEscolhida);
+                    System.out.println("Categoria escolhida: " + categoriaEscolhida);
                 }
 
                 cartaComparativa = cartaEscolhida;
                 mostraCartaComparativa();
 
                 if (atual.getMao().isEmpty()) {
-                    System.out.println("Jogador " + jogadorAtual + " venceu o jogo!");
+                    System.out.println(atual.getNome() + " venceu o jogo!");
                     jogoAcabou = true;
                     continue;
                 }
@@ -107,18 +115,13 @@ public class UNO {
 
                     switch (cartaEscolhida.getAcao()) {
                         case PULAR -> {
-                            System.out.println("Jogador " + proximoJogador + " perdeu a vez!");
+                            System.out.println(proximo.getNome() + " perdeu a vez!");
                             proximoJogador = (proximoJogador + direcao + jogadores.size()) % jogadores.size();
                         }
                         case INVERTER -> {
                             direcao *= -1;
                             System.out.println("Sentido do jogo invertido!");
-                            if (jogadores.size() == 2) {
-                                // com 2 jogadores, inverter = pular o adversário
-                                proximoJogador = (jogadorAtual + direcao + jogadores.size()) % jogadores.size();
-                            } else {
-                                proximoJogador = (jogadorAtual + direcao + jogadores.size()) % jogadores.size();
-                            }
+                            proximoJogador = (jogadorAtual + direcao + jogadores.size()) % jogadores.size();
                         }
                         case MAIS_DOIS -> {
                             comprarCartas(proximo, 2);
@@ -131,7 +134,7 @@ public class UNO {
                             proximoJogador = (proximoJogador + direcao + jogadores.size()) % jogadores.size();
                         }
                         case NOVA_COR -> {
-                            // sem efeito adicional além da troca de cor já aplicada acima
+                            // sem efeito adicional além da troca de categoria já aplicada acima
                         }
                     }
                 }
@@ -141,19 +144,27 @@ public class UNO {
         }
     }
 
-    Cor escolheCor() {
-        Cor[] cores = Cor.values();
+    CategoriaCarta escolheCategoria() {
+        CategoriaCarta[] opcoes = (modo == Modo.UNO_OFICIAL) ? Cor.values() : Naipe.values();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Escolha a nova cor:");
-            for (int i = 0; i < cores.length; i++) {
-                System.out.println((i + 1) + ") " + cores[i]);
+            System.out.println("Escolha a nova categoria:");
+            for (int i = 0; i < opcoes.length; i++) {
+                char letra = (char) ('a' + i);
+                System.out.println(letra + ") " + opcoes[i]);
             }
-            int c = sc.nextInt();
-            if (c >= 1 && c <= cores.length) {
-                return cores[c - 1];
+
+            String entrada = sc.nextLine().trim();
+
+            if (entrada.length() == 1) {
+                char letra = Character.toLowerCase(entrada.charAt(0));
+                int indice = letra - 'a';
+                if (indice >= 0 && indice < opcoes.length) {
+                    return opcoes[indice];
+                }
             }
+
             System.out.println("Opção inválida, tente novamente.");
         }
     }
@@ -219,13 +230,17 @@ public class UNO {
     void mostraMao(Jogador jogador) {
         List<Carta> cartasJogador = jogador.getMao();
         for (int i = 0; i < cartasJogador.size(); i++) {
-            System.out.print((i + 1) + ") ");
+            char letra = (char) ('a' + i);
+            System.out.print(letra + ") ");
             mostraCarta(cartasJogador.get(i));
         }
     }
 
     boolean verificaCartas(Carta cartaJogador, Carta cartaComparativa) {
-        return cartaJogador.getCategoria() == cartaComparativa.getCategoria() || cartaJogador.getValor() == cartaComparativa.getValor() || cartaJogador.getSimbolo() == cartaComparativa.getSimbolo() || cartaJogador.getIsCuringa();
+        return cartaJogador.getCategoria() == cartaComparativa.getCategoria()
+                || cartaJogador.getValor() == cartaComparativa.getValor()
+                || cartaJogador.getSimbolo() == cartaComparativa.getSimbolo()
+                || cartaJogador.getIsCuringa();
     }
 
     static void reabastecerPilhaCompra(List<Carta> pilhaCompra, List<Carta> pilhaDescarte) {
