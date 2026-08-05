@@ -42,37 +42,4 @@ public class BaralhoConvencional extends Baralho<CartaConvencional> {
                 cartas.add(new CartaConvencional(simbolo[i], acao[i-10]));
         }
     }
-
-    public ArrayList<Naipe> getNaipe() {
-        ArrayList<Naipe> naipes = new ArrayList<>();
-        for (CartaConvencional carta : cartas) {
-            naipes.add(carta.getNaipe());
-        }
-
-        return naipes;
-    }
-
-    public ArrayList<Simbolo> getSimbolo() {
-        ArrayList<Simbolo> simbolos = new ArrayList<>();
-        for (CartaConvencional carta : cartas) {
-            simbolos.add(carta.getSimbolo());
-        }
-
-        return simbolos;
-    }
-
-    public void getCarta() {
-        for (CartaConvencional carta : cartas) {
-            if(carta.getNaipe() != null){
-                System.out.println(carta.getNaipe());
-            }
-            System.out.println(carta.getSimbolo());
-
-            if (carta.getAcao() != null) {
-                System.out.println(carta.getAcao());
-            }
-
-            System.out.println();
-        }
-    }
 }

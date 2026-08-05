@@ -22,11 +22,6 @@ public class CartaConvencional extends Carta {
         super(simbolo, acao);
     }
 
-    // Getters
-    public Naipe getNaipe() {
-        return this.naipe;
-    }
-
     public void setCategoria(CategoriaCarta categoria) {
         super.setCategoria(categoria);
         this.naipe = (Naipe) categoria;

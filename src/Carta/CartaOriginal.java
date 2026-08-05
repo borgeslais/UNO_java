@@ -20,11 +20,6 @@ public class CartaOriginal extends Carta {
         super(simbolo, acao);
     }
 
-    // Getters
-    public Cor getCor(){
-        return this.cor;
-    }
-
     public void setCategoria(CategoriaCarta categoria) {
         super.setCategoria(categoria);
         this.cor = (Cor) categoria;

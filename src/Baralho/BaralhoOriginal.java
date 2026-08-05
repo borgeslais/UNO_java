@@ -50,24 +50,4 @@ public class BaralhoOriginal extends Baralho<CartaOriginal>{
         }
     }
 
-
-    public void getCarta() {
-        for (CartaOriginal carta : cartas) {
-            if (carta.getCor() != null) {
-                System.out.println(carta.getCor());
-            }
-
-            if (!carta.getIsCuringa()) {
-                System.out.println(carta.getSimbolo());
-            }
-
-            if (carta.getAcao() != null) {
-                System.out.println(carta.getAcao());
-            }
-
-            System.out.println();
-        }
-
-    }
-
 }
