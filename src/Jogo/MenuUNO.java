@@ -2,8 +2,8 @@ package Jogo;
 
 import java.util.Scanner;
 
-public class Jogo {
-    public Jogo() {
+public class MenuUNO {
+    public MenuUNO() {
         System.out.println("********   UNO   ********");
         System.out.println("Selecione o modo de jogo: com baralho oficial UNO ou com baralho de cartas convencional:");
         System.out.println("a) Baralho UNO oficial");
