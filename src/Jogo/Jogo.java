@@ -9,7 +9,20 @@ public class Jogo {
         System.out.println("a) Baralho UNO oficial");
         System.out.println("b) Baralho convencional");
         Scanner sc = new Scanner(System.in);
-        char modo = Character.toLowerCase(sc.next().charAt(0));
+
+        // Validação do modo de jogo
+        char modo;
+        while (true) {
+            String input = sc.next().trim();
+            if (input.length() == 1) {
+                modo = Character.toLowerCase(input.charAt(0));
+                if (modo == 'a' || modo == 'b') {
+                    break;
+                }
+            }
+            System.out.println("Opção inválida! Digite apenas 'a' para UNO oficial ou 'b' para convencional:");
+        }
+
         System.out.println("Selecione a letra correspondente à quantidade de jogadores:");
         System.out.println("a) 2 jogadores");
         System.out.println("b) 3 jogadores");
@@ -20,21 +33,28 @@ public class Jogo {
         System.out.println("g) 8 jogadores");
         System.out.println("h) 9 jogadores");
         System.out.println("i) 10 jogadores");
-        char jogador = Character.toLowerCase(sc.next().charAt(0));
-        int jogadorNum = jogador;
+
+        // Validação da quantidade de jogadores
+        char jogador;
+        while (true) {
+            String input = sc.next().trim();
+            if (input.length() == 1) {
+                jogador = Character.toLowerCase(input.charAt(0));
+                if (jogador >= 'a' && jogador <= 'i') {
+                    break;
+                }
+            }
+            System.out.println("Opção inválida! Digite apenas UMA letra de 'a' a 'i':");
+        }
+
+        int jogadorNum = jogador - 'a' + 2; // Converte 'a' para 2, 'b' para 3, etc.
+
         if (modo == 'a') {
-            if (jogador >= 'a' && jogador <= 'i') {
-                Modo modoOficial = Modo.UNO_OFICIAL;
-                UNO unoOficial = new UNO(modoOficial, jogadorNum-95);
-            }
-        } else if (modo == 'b') {
-            if (jogador >= 'a' && jogador <= 'i') {
-                Modo modoConvencional = Modo.CONVENCIONAL;
-                UNO unoConvencional = new UNO(modoConvencional, jogadorNum-95);
-            }
-        } else {
-            System.out.println("Opção inválida.");
+            Modo modoOficial = Modo.UNO_OFICIAL;
+            UNO unoOficial = new UNO(modoOficial, jogadorNum);
+        } else { // modo == 'b'
+            Modo modoConvencional = Modo.CONVENCIONAL;
+            UNO unoConvencional = new UNO(modoConvencional, jogadorNum);
         }
     }
 }
-
