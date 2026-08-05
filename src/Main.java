@@ -4,6 +4,7 @@ import Jogo.MenuUNO;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        // Jogo produzido por Lais Borges e Philipe Marques
        new MenuUNO();
     }
 }
