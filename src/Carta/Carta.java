@@ -56,5 +56,8 @@ public abstract class Carta {
         return eCuringa;
     }
 
+    public void setCategoria(CategoriaCarta categoria) {
+        this.categoria = categoria;
+    }
 
 }
